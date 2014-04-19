@@ -1,0 +1,4 @@
+RichCoin
+========
+
+Rich Coin
