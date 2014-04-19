@@ -1,0 +1,141 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+BIGCOUNT	simple_taboo_search.c	13;"	d	file:
+BIGCOUNT	simple_taboo_search_6_backup.c	13;"	d	file:
+CliqueCount	clique_count.c	/^int CliqueCount(int *g,$/;"	f
+CliqueCount	simple_taboo_search.c	/^int CliqueCount(int *g,$/;"	f
+CliqueCount	simple_taboo_search_6_backup.c	/^int CliqueCount(int *g,$/;"	f
+CliqueCountG	clique_count.c	/^double CliqueCountG(int *g, int gsize, double *countg)$/;"	f
+CliqueCount_EA	ramsey.c	/^CliqueCount_EA(int *g, int gsize, int best_count)$/;"	f
+CopyGraph	simple_taboo_search.c	/^void CopyGraph(int *old_g, int o_gsize, int *new_g, int n_gsize)$/;"	f
+CopyGraph	simple_taboo_search_6_backup.c	/^void CopyGraph(int *old_g, int o_gsize, int *new_g, int n_gsize)$/;"	f
+FIFOCount	fifo.c	/^int FIFOCount(void *in_f)$/;"	f
+FIFODelete	fifo.c	/^FIFODelete(void *in_f)$/;"	f
+FIFODeleteEdgeCount	fifo.c	/^FIFODeleteEdgeCount(void *in_f)$/;"	f
+FIFODeleteGraph	fifo.c	/^FIFODeleteGraph(void *in_f)$/;"	f
+FIFOFindEdgeCount	fifo.c	/^int FIFOFindEdgeCount(void *in_f, int i, int j, int count) $/;"	f
+FIFOFindGraph	fifo.c	/^int FIFOFindGraph(void *in_f, int *g, int gsize)$/;"	f
+FIFOInitEdgeCount	fifo.c	/^void *FIFOInitEdgeCount(int size)$/;"	f
+FIFOInitGraph	fifo.c	/^void *FIFOInitGraph(int size)$/;"	f
+FIFOInsertEdgeCount	fifo.c	/^FIFOInsertEdgeCount(void *in_f, int i, int j, int count)$/;"	f
+FIFOInsertGraph	fifo.c	/^FIFOInsertGraph(void *in_f, int *g, int gsize)$/;"	f
+FIFOResetEdgeCount	fifo.c	/^void *FIFOResetEdgeCount(void *in_f)$/;"	f
+FIFOResetGraph	fifo.c	/^void *FIFOResetGraph(void *in_f)$/;"	f
+FIFO_t	fifo.c	/^typedef struct fifo_stc FIFO_t;$/;"	t	typeref:struct:fifo_stc	file:
+InitEdges	ramsey.c	/^InitEdges(int *edges, int gsize, int seed)$/;"	f
+InitGraph	ramsey.c	/^InitGraph(int *g, int gsize, int seed)$/;"	f
+JNULL	jval.c	/^Jval JNULL;$/;"	v
+MASKSIZE	fifo.c	131;"	d	file:
+MAXSIZE	simple_taboo_search.c	10;"	d	file:
+MAXSIZE	simple_taboo_search_6_backup.c	10;"	d	file:
+MakeEdgeCountKey	fifo.c	/^double MakeEdgeCountKey(int distance, int count)$/;"	f
+MakeGraphKey	fifo.c	/^int MakeGraphKey(int *s, int gsize, char **key)$/;"	f
+Mask	fifo.c	/^static unsigned char Mask[MASKSIZE];	\/* should be big enough to $/;"	v	file:
+OutputGraph	ramsey.c	/^OutputGraph(int *g, int gsize, int seed)$/;"	f
+PrintGraph	simple_taboo_search.c	/^void PrintGraph(int *g, int gsize)$/;"	f
+PrintGraph	simple_taboo_search_6_backup.c	/^void PrintGraph(int *g, int gsize)$/;"	f
+TABOOSIZE	simple_taboo_search.c	12;"	d	file:
+TABOOSIZE	simple_taboo_search_6_backup.c	12;"	d	file:
+delete_item	jrb.c	/^static void delete_item(JRB item)		\/* Deletes an arbitrary iterm *\/$/;"	f	file:
+dll_append	dllist.c	/^void dll_append(Dllist l, Jval val)     \/* Inserts at the end of the list *\/$/;"	f
+dll_delete_node	dllist.c	/^void dll_delete_node(Dllist node)		\/* Deletes an arbitrary iterm *\/$/;"	f
+dll_empty	dllist.c	/^int dll_empty(Dllist l)$/;"	f
+dll_insert_a	dllist.c	/^void dll_insert_a(Dllist n, Jval val)        \/* Inserts after a given node *\/$/;"	f
+dll_insert_b	dllist.c	/^void dll_insert_b(Dllist node, Jval v)       \/* Inserts before a given node *\/$/;"	f
+dll_prepend	dllist.c	/^void dll_prepend(Dllist l, Jval val)    \/* Inserts at the beginning of the list *\/$/;"	f
+dll_val	dllist.c	/^Jval dll_val(Dllist l)$/;"	f
+fcount	fifo.c	/^	int fcount;$/;"	m	struct:fifo_stc	file:
+fifo	fifo.c	/^	Dllist fifo;$/;"	m	struct:fifo_stc	file:
+fifo_stc	fifo.c	/^struct fifo_stc$/;"	s	file:
+findex	fifo.c	/^	JRB findex;$/;"	m	struct:fifo_stc	file:
+free_dllist	dllist.c	/^void free_dllist(Dllist l)$/;"	f
+getlext	jrb.c	28;"	d	file:
+getrext	jrb.c	30;"	d	file:
+insert	jrb.c	/^static void insert(JRB item, JRB list)	\/* Inserts to the end of a list *\/$/;"	f	file:
+isblack	jrb.c	21;"	d	file:
+isext	jrb.c	25;"	d	file:
+ishead	jrb.c	26;"	d	file:
+isint	jrb.c	24;"	d	file:
+isleft	jrb.c	22;"	d	file:
+isred	jrb.c	20;"	d	file:
+isright	jrb.c	23;"	d	file:
+isroot	jrb.c	27;"	d	file:
+jrb_delete_node	jrb.c	/^void jrb_delete_node(JRB n)$/;"	f
+jrb_find_dbl	jrb.c	/^JRB jrb_find_dbl(JRB n, double dkey)$/;"	f
+jrb_find_gen	jrb.c	/^JRB jrb_find_gen(JRB n, Jval key, int (*fxn)(Jval, Jval))$/;"	f
+jrb_find_gte_dbl	jrb.c	/^JRB jrb_find_gte_dbl(JRB n, double dkey, int *fnd)$/;"	f
+jrb_find_gte_gen	jrb.c	/^JRB jrb_find_gte_gen(JRB n, Jval key,int (*fxn)(Jval, Jval), int *fnd)$/;"	f
+jrb_find_gte_int	jrb.c	/^JRB jrb_find_gte_int(JRB n, int ikey, int *fnd)$/;"	f
+jrb_find_gte_str	jrb.c	/^JRB jrb_find_gte_str(JRB n, char *key, int *fnd)$/;"	f
+jrb_find_int	jrb.c	/^JRB jrb_find_int(JRB n, int ikey)$/;"	f
+jrb_find_str	jrb.c	/^JRB jrb_find_str(JRB n, char *key)$/;"	f
+jrb_free_tree	jrb.c	/^void jrb_free_tree(JRB n)$/;"	f
+jrb_insert_a	jrb.c	/^static JRB jrb_insert_a(JRB nd, Jval key, Jval val)$/;"	f	file:
+jrb_insert_b	jrb.c	/^static JRB jrb_insert_b(JRB n, Jval key, Jval val)$/;"	f	file:
+jrb_insert_dbl	jrb.c	/^JRB jrb_insert_dbl(JRB tree, double dkey, Jval val)$/;"	f
+jrb_insert_gen	jrb.c	/^JRB jrb_insert_gen(JRB tree, Jval key, Jval val,$/;"	f
+jrb_insert_int	jrb.c	/^JRB jrb_insert_int(JRB tree, int ikey, Jval val)$/;"	f
+jrb_insert_str	jrb.c	/^JRB jrb_insert_str(JRB tree, char *key, Jval val)$/;"	f
+jrb_iprint_tree	jrb.c	/^void jrb_iprint_tree(JRB t, int level)$/;"	f
+jrb_nblack	jrb.c	/^int jrb_nblack(JRB n)$/;"	f
+jrb_plength	jrb.c	/^int jrb_plength(JRB n)$/;"	f
+jrb_print_tree	jrb.c	/^void jrb_print_tree(JRB t, int level)$/;"	f
+jrb_val	jrb.c	/^Jval jrb_val(JRB n)$/;"	f
+jval_c	jval.c	/^char jval_c(Jval j) {$/;"	f
+jval_carray	jval.c	/^char *jval_carray(Jval j) {$/;"	f
+jval_d	jval.c	/^double jval_d(Jval j) {$/;"	f
+jval_f	jval.c	/^float jval_f(Jval j) {$/;"	f
+jval_farray	jval.c	/^float *jval_farray(Jval j) {$/;"	f
+jval_i	jval.c	/^int jval_i(Jval j) {$/;"	f
+jval_iarray	jval.c	/^int *jval_iarray(Jval j) {$/;"	f
+jval_l	jval.c	/^long jval_l(Jval j) {$/;"	f
+jval_s	jval.c	/^char *jval_s(Jval j) {$/;"	f
+jval_sh	jval.c	/^short jval_sh(Jval j) {$/;"	f
+jval_uc	jval.c	/^unsigned char jval_uc(Jval j) {$/;"	f
+jval_ui	jval.c	/^unsigned int jval_ui(Jval j) {$/;"	f
+jval_ush	jval.c	/^unsigned short jval_ush(Jval j) {$/;"	f
+jval_v	jval.c	/^void *jval_v(Jval j) {$/;"	f
+lprev	jrb.c	/^JRB lprev(JRB n)$/;"	f
+main	simple_taboo_search.c	/^main(int argc,char *argv[])$/;"	f
+main	simple_taboo_search_6_backup.c	/^main(int argc,char *argv[])$/;"	f
+make_jrb	jrb.c	/^JRB make_jrb()$/;"	f
+max_size	fifo.c	/^	int max_size;$/;"	m	struct:fifo_stc	file:
+mk_new_ext	jrb.c	61;"	d	file:
+mk_new_int	jrb.c	/^static void mk_new_int(JRB l, JRB r, JRB p, int il)$/;"	f	file:
+new_dllist	dllist.c	/^Dllist new_dllist()$/;"	f
+new_jval_c	jval.c	/^Jval new_jval_c(char c) {$/;"	f
+new_jval_carray_nnt	jval.c	/^Jval new_jval_carray_nnt(char *carray) {$/;"	f
+new_jval_carray_nt	jval.c	/^Jval new_jval_carray_nt(char *carray) {$/;"	f
+new_jval_d	jval.c	/^Jval new_jval_d(double d) {$/;"	f
+new_jval_f	jval.c	/^Jval new_jval_f(float f) {$/;"	f
+new_jval_farray	jval.c	/^Jval new_jval_farray(float f0, float f1) {$/;"	f
+new_jval_i	jval.c	/^Jval new_jval_i(int i) {$/;"	f
+new_jval_iarray	jval.c	/^Jval new_jval_iarray(int i0, int i1) {$/;"	f
+new_jval_l	jval.c	/^Jval new_jval_l(long l) {$/;"	f
+new_jval_s	jval.c	/^Jval new_jval_s(char *s) {$/;"	f
+new_jval_sh	jval.c	/^Jval new_jval_sh(short sh) {$/;"	f
+new_jval_uc	jval.c	/^Jval new_jval_uc(unsigned char uc) {$/;"	f
+new_jval_ui	jval.c	/^Jval new_jval_ui(unsigned int i) {$/;"	f
+new_jval_ush	jval.c	/^Jval new_jval_ush(unsigned short ush) {$/;"	f
+new_jval_v	jval.c	/^Jval new_jval_v(void *v) {$/;"	f
+recolor	jrb.c	/^static void recolor(JRB n)$/;"	f	file:
+rprev	jrb.c	/^JRB rprev(JRB n)$/;"	f
+setblack	jrb.c	33;"	d	file:
+setext	jrb.c	39;"	d	file:
+sethead	jrb.c	36;"	d	file:
+setint	jrb.c	38;"	d	file:
+setleft	jrb.c	34;"	d	file:
+setlext	jrb.c	29;"	d	file:
+setnormal	jrb.c	40;"	d	file:
+setred	jrb.c	32;"	d	file:
+setrext	jrb.c	31;"	d	file:
+setright	jrb.c	35;"	d	file:
+setroot	jrb.c	37;"	d	file:
+sgsize	clique_count.c	13;"	d	file:
+shuffle	ramsey.c	/^shuffle(int *randList, int n)$/;"	f
+sibling	jrb.c	41;"	d	file:
+single_rotate	jrb.c	/^static void single_rotate(JRB y, int l)$/;"	f	file:
