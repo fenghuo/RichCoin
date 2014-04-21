@@ -35,7 +35,8 @@ int count4;
 int count3;
 int count2;
 int count1;
-
+int*gg=NULL;
+int gmax,gmaxv;
 
 /***
  *** example of very simple search for R(6,6) counter examples
@@ -52,6 +53,11 @@ int count1;
  *
  * prints in the right format for the read routine
  */
+
+#define GET(g, X, Y ,size)  ((X) < (Y) ? (g[X*size+Y]) : (g[Y*size+X]))
+
+int CliqueCount4(int *g,int gsize,int x,int y);
+
 void PrintGraph(int *g, int gsize)
 {
 	int i;
@@ -340,6 +346,224 @@ int CliqueCount2(int *g,int gsize,int maxcount)
     return(count);
 }
 
+void add(int*p,int count) {
+	int i,j,incr,decr;
+	for(i=0;i<6;i++)
+		for(j=i+1;j<6;j++)
+		{
+			decr=++gg[p[i]*gsize+p[j]];
+			if(decr>gmax && !FIFOFindEdgeCount(taboo_list,p[i],p[j],count))
+			{
+				incr=CliqueCount4(g,gsize,p[i],p[j]);
+				if(decr-incr>gmax)
+				{
+					gmax=decr-incr;
+					gmaxv=p[i]*gsize+p[j];
+					printf("%d,%d - %d\n",p[i],p[j],gmax);
+				}
+			}
+
+		}
+}
+
+void add2(int*p,int count) {
+	int i,j,incr,decr;
+	for(i=0;i<6;i++)
+		for(j=i+1;j<6;j++)
+			++gg[p[i]*gsize+p[j]];
+}
+
+int CliqueCount3(int *g,int gsize)
+{
+    int i;
+    int j;
+    int k;
+    int l;
+    int m;
+    int n;
+    int count=0;
+    int sgsize = 6;
+    count5=count4=count3=count2=count1=0;
+    
+    for(i=0;i < gsize-sgsize+1; i++)
+    {
+	for(j=i+1;j < gsize-sgsize+2; j++)
+        {
+	    for(k=j+1;k < gsize-sgsize+3; k++) 
+            { 
+		if((g[i*gsize+j] == g[i*gsize+k]) && 
+		   (g[i*gsize+j] == g[j*gsize+k]))
+		{
+		    for(l=k+1;l < gsize-sgsize+4; l++) 
+		    { 
+			if((g[i*gsize+j] == g[i*gsize+l]) && 
+			   (g[i*gsize+j] == g[j*gsize+l]) && 
+			   (g[i*gsize+j] == g[k*gsize+l]))
+			{
+			    count4++;
+			    for(m=l+1;m < gsize-sgsize+5; m++) 
+			    {
+				if((g[i*gsize+j] == g[i*gsize+m]) && 
+				   (g[i*gsize+j] == g[j*gsize+m]) &&
+				   (g[i*gsize+j] == g[k*gsize+m]) && 
+				   (g[i*gsize+j] == g[l*gsize+m])) {
+					
+					count5++;
+					for(n=m+1; n < gsize-sgsize+6; n++)
+					{
+						if((g[i*gsize+j]
+							== g[i*gsize+n]) &&
+						   (g[i*gsize+j] 
+							== g[j*gsize+n]) &&
+						   (g[i*gsize+j] 
+							== g[k*gsize+n]) &&
+						   (g[i*gsize+j] 
+							== g[l*gsize+n]) &&
+						   (g[i*gsize+j] 
+							== g[m*gsize+n])) {
+			      					count++;
+							int t[6];
+							t[0]=i;
+							t[1]=j;
+							t[2]=k;
+							t[3]=l;
+							t[4]=m;
+							t[5]=n;
+							add2(t,count);	
+						}
+					}
+				}
+			    }
+			}
+		    }
+		}
+	    }
+         }
+     }
+    return(count);
+}
+
+int CliqueCount4(int *g,int gsize,int x,int y)
+{
+    int i;
+    int j;
+    int k;
+    int l;
+    int m;
+    int n;
+    int count=0;
+    int sgsize = 4;
+    int c=1-g[x*gsize+y];
+
+    for(i=0;i < gsize-sgsize+1; i++)
+    {
+	if(i==x || i==y)
+		continue;
+	
+	if(GET(g,i,x,gsize)==c && GET(g,i,y,gsize)==c)
+	{
+		for(j=i+1;j < gsize-sgsize+2; j++)
+	       	 {
+		    if(j==x || j==y)
+			continue;
+		if(GET(g,j,x,gsize)==c && GET(g,j,y,gsize)==c && GET(g,j,i,gsize)==c)
+		{
+
+		    for(k=j+1;k < gsize-sgsize+3; k++) 
+	            { 
+			if(k==x || k==y)
+				continue;
+		
+			if(GET(g,k,x,gsize)==c && GET(g,k,y,gsize)==c && GET(g,k,i,gsize)==c && GET(g,k,j,gsize)==c)
+			{
+			    for(l=k+1;l < gsize-sgsize+4; l++) 
+			    { 	
+				if(l==x || l==y)
+					continue;
+				if(GET(g,l,x,gsize)==c && GET(g,l,y,gsize)==c && GET(g,l,i,gsize)==c && GET(g,l,j,gsize)==c && GET(g,l,k,gsize)==c)
+				{
+					count++;	
+				}
+			    }
+			}
+		    }
+        	 }
+		}
+	}
+     }
+    return(count);
+}
+
+int CliqueCount5(int *g, int gsize)
+{
+    int i;
+    int j;
+    int k;
+    int l;
+    int m;
+    int n;
+    int count=0;
+    int sgsize = 4;
+    count5=0;
+    
+	int c=0;
+    for(i=0;i < gsize-sgsize+1; i++)
+    {
+	for(j=i+1;j < gsize-sgsize+2; j++)
+        {
+	    for(k=j+1;k < gsize-sgsize+3; k++) 
+            { 
+		if((g[i*gsize+j] == g[i*gsize+k]) && 
+		   (g[i*gsize+j] == g[j*gsize+k]))
+		{
+		    for(l=k+1;l < gsize-sgsize+4; l++) 
+		    { 
+			if((g[i*gsize+j] == g[i*gsize+l]) && 
+			   (g[i*gsize+j] == g[j*gsize+l]) && 
+			   (g[i*gsize+j] == g[k*gsize+l]))
+			{
+			   // target m,n
+			    for(m=0;m < gsize; m++) 
+			    {
+				if(m==i || m==j || m==k || m==l)
+					continue;
+				if((g[i*gsize+j] == g[i*gsize+m]) && 
+				   (g[i*gsize+j] == g[j*gsize+m]) &&
+				   (g[i*gsize+j] == g[k*gsize+m]) && 
+				   (g[i*gsize+j] == g[l*gsize+m])) {
+					for(n=m+1; n < gsize; n++)
+					{
+						if(n==i || n==j || n==k || n==l)
+							continue;
+						if((g[i*gsize+j] == g[i*gsize+n]) &&
+						   (g[i*gsize+j] == g[j*gsize+n]) &&
+						   (g[i*gsize+j] == g[k*gsize+n]) &&
+						   (g[i*gsize+j] == g[l*gsize+n]) &&
+						   (g[i*gsize+j] != g[m*gsize+n])) {
+	
+							gg[m*gsize+n]--;
+
+						}
+					}
+				}
+			    }
+			}
+		    }
+		}
+	    }
+         }
+     }
+    return(count);
+}
+
+int CliqueCount6(int *g, int gsize)
+{
+	int i,j;
+	for(i=0;i<gsize;i++)
+		for(j=i+1;j<gsize;j++)
+			CliqueCount4(g,gsize,i,j);
+
+}
 void GoodCopy(int*o,int os,int*n,int ns)
 {
 	int i,count,c;
@@ -394,11 +618,13 @@ void search1()
 				g[i*gsize+j] = 1 - g[i*gsize+j];
 				count = CliqueCount2(g,gsize,best_count);
 
+
 				// * is it better and the i,j,count not taboo?
 				if((count <= best_count) && 
 //					!FIFOFindEdge(taboo_list,i,j))
 					!FIFOFindEdgeCount(taboo_list,i,j,count))
 				{
+					printf("%d,%d : %d\n",i,j,count);
 					if(count<best_count )
 						update();
 					else if(count5<=best_count5)
@@ -615,6 +841,397 @@ void found()
 			taboo_list = FIFOResetEdge(taboo_list);
 }
 
+void search4()
+{
+
+		best_count = BIGCOUNT;
+		best_count5 = BIGCOUNT;
+
+		for(i=0; i < gsize; i++)
+		{
+			for(j=i+1; j < gsize; j++) {
+				// flip it
+				g[i*gsize+j] = 1 - g[i*gsize+j];
+			}
+
+			count = CliqueCount2(g,gsize,best_count);
+			if((count < best_count) && 
+//				!FIFOFindEdge(taboo_list,i,j))
+				!FIFOFindEdgeCount(taboo_list,i,0,count))
+			{
+				printf("%d,%d : %d\n",i,j,count);
+				best_count=count;
+				best_i=i;
+				best_j=0;
+			}
+			for(j=i+1; j < gsize; j++)
+			{
+				// flip it
+				g[i*gsize+j] = 1 - g[i*gsize+j];
+			}
+		}
+
+		for(j=0; j < gsize; j++)
+		{
+			for(i=j-1;i>=0;i--)
+			{
+				// flip it
+				g[i*gsize+j] = 1 - g[i*gsize+j];
+			}
+
+			count = CliqueCount2(g,gsize,best_count);
+			if((count < best_count) && 
+//				!FIFOFindEdge(taboo_list,i,j))
+				!FIFOFindEdgeCount(taboo_list,0,j,count))
+			{
+				printf("%d,%d : %d\n",i,j,count);
+				best_count=count;
+				best_i=0;
+				best_j=j;
+			}
+			for(i=j-1;i>=0;i--)
+			{
+				// flip it
+				g[i*gsize+j] = 1 - g[i*gsize+j];
+			}
+		}
+
+
+		if(best_count == BIGCOUNT) {
+			exit(1);
+		}
+	
+		/*
+		 * keep the best flip we saw
+		 */
+		if(best_i)
+		{
+			i=best_i;
+			for(j=i+1; j < gsize; j++)
+			{
+				// flip it
+				g[i*gsize+j] = 1 - g[i*gsize+j];
+			}
+		}
+		else
+		{
+			j=best_j;
+			for(i=j-1;i>=0;i--)
+			{
+				// flip it
+				g[i*gsize+j] = 1 - g[i*gsize+j];
+			}
+
+		}
+		/*
+		 * taboo this graph configuration so that we don't visit
+		 * it again
+		 */
+		count = CliqueCount(g,gsize);
+//		FIFOInsertEdge(taboo_list,best_i,best_j);
+		FIFOInsertEdgeCount(taboo_list,best_i,best_j,best_count);
+//		FIFOInsertEdge(taboo_list,best_x,best_y);
+
+		/*		
+		printf("ce size: %d, best_count: %d, swap: (%d,%d)\n",
+			gsize,
+			best_count,
+			best_x,
+			best_y
+			);
+		*/
+		printf("ce size: %d, best_count: %d, best edge: (%d,%d), new color: %d\n",
+			gsize,
+			best_count,
+			best_i,
+			best_j,
+			g[best_i*gsize+best_j]);
+		lastcount=best_count;
+
+		DumpGraph(g,gsize);
+		/*
+		 * rinse and repeat
+		 */
+
+}
+void search5()
+{
+
+		best_count = BIGCOUNT;
+		best_count5 = BIGCOUNT;
+
+		for(i=0; i < gsize; i++)
+		{
+			for(j=i+1; j < gsize; j++) 
+			{
+				// flip it
+			g[i*gsize+j] = 1 - g[i*gsize+j];
+
+			count = CliqueCount2(g,gsize,best_count);
+			if((count < best_count) && 
+//				!FIFOFindEdge(taboo_list,i,j))
+				!FIFOFindEdgeCount(taboo_list,i,j,count))
+			{
+				printf("%d,%d : %d\n",i,j,count);
+				best_count=count;
+				best_i=i;
+				best_j=j;
+			}
+			for(j=i+1; j < gsize; j++)
+			{
+				// flip it
+				g[i*gsize+j] = 1 - g[i*gsize+j];
+			}
+			}
+		}
+
+		if(best_count == BIGCOUNT) {
+			exit(1);
+		}
+	
+		/*
+		 * keep the best flip we saw
+		 */
+		i=best_i;
+		for(j=i+1; j <= best_j; j++)
+		{
+			// flip it
+			g[i*gsize+j] = 1 - g[i*gsize+j];
+		}
+		/*
+		 * taboo this graph configuration so that we don't visit
+		 * it again
+		 */
+		count = CliqueCount(g,gsize);
+//		FIFOInsertEdge(taboo_list,best_i,best_j);
+		FIFOInsertEdgeCount(taboo_list,best_i,best_j,best_count);
+//		FIFOInsertEdge(taboo_list,best_x,best_y);
+
+		/*		
+		printf("ce size: %d, best_count: %d, swap: (%d,%d)\n",
+			gsize,
+			best_count,
+			best_x,
+			best_y
+			);
+		*/
+		printf("ce size: %d, best_count: %d, best edge: (%d,%d), new color: %d\n",
+			gsize,
+			best_count,
+			best_i,
+			best_j,
+			g[best_i*gsize+best_j]);
+	
+		lastcount=best_count;
+
+		DumpGraph(g,gsize);
+		/*
+		 * rinse and repeat
+		 */
+
+}
+
+int N=30;
+
+void search6()
+{
+
+		best_count = BIGCOUNT;
+		best_count5 = BIGCOUNT;
+
+		for(i=0; i < gsize; i++)
+		{
+			for(j=i+1; j < gsize; j++) 
+			{
+				// flip it
+			g[i*gsize+j] = 1 - g[i*gsize+j];
+
+			count = CliqueCount2(g,gsize,best_count);
+			if((count < best_count) && 
+//				!FIFOFindEdge(taboo_list,i,j))
+				!FIFOFindEdgeCount(taboo_list,i,j,count))
+			{
+				printf("%d,%d : %d\n",i,j,count);
+				best_count=count;
+				best_i=i;
+				best_j=j;
+			}
+			for(j=i+1; j < gsize; j++)
+			{
+				// flip it
+				g[i*gsize+j] = 1 - g[i*gsize+j];
+			}
+			}
+		}
+
+		if(best_count == BIGCOUNT) {
+			exit(1);
+		}
+	
+		/*
+		 * keep the best flip we saw
+		 */
+		i=best_i;
+		for(j=i+1; j <= best_j; j++)
+		{
+			// flip it
+			g[i*gsize+j] = 1 - g[i*gsize+j];
+		}
+		/*
+		 * taboo this graph configuration so that we don't visit
+		 * it again
+		 */
+		count = CliqueCount(g,gsize);
+//		FIFOInsertEdge(taboo_list,best_i,best_j);
+		FIFOInsertEdgeCount(taboo_list,best_i,best_j,best_count);
+//		FIFOInsertEdge(taboo_list,best_x,best_y);
+
+		/*		
+		printf("ce size: %d, best_count: %d, swap: (%d,%d)\n",
+			gsize,
+			best_count,
+			best_x,
+			best_y
+			);
+		*/
+		printf("ce size: %d, best_count: %d, best edge: (%d,%d), new color: %d\n",
+			gsize,
+			best_count,
+			best_i,
+			best_j,
+			g[best_i*gsize+best_j]);
+	
+		lastcount=best_count;
+
+		DumpGraph(g,gsize);
+		/*
+		 * rinse and repeat
+		 */
+
+}
+
+
+void search7()
+{
+		int i,j;
+		best_count = BIGCOUNT;
+		best_count5 = BIGCOUNT;
+
+		gg=(int*)malloc(gsize*gsize*sizeof(int));
+
+		memset(gg,0,gsize*gsize*sizeof(int));
+		gmax=0;
+
+		count=CliqueCount3(g,gsize);
+
+		i=gmaxv/gsize;
+		j=gmaxv%gsize;
+
+	//	printf("test 10,30 : %d\n",gg[10*gsize+30]-CliqueCount4(g,gsize,10,30));
+	//	exit(1);
+
+
+		gmax=-IMAX;
+		gmaxv=0;
+		int c=0;
+		int m,n,decr,incr;
+		for(m=0;m<gsize;m++)
+			for(n=m+1;n<gsize;n++)
+			{
+				decr=gg[m*gsize+n];
+				if(decr>gmax && !FIFOFindEdgeCount(taboo_list,m,n,count))
+			{
+				c++;
+				incr=CliqueCount4(g,gsize,m,n);
+				if(decr-incr>gmax)
+				{
+					gmax=decr-incr;
+					gmaxv=m*gsize+n;
+					printf("%d,%d - %d\n",m,n,gmax);
+				}
+			}
+			}
+
+		printf(" loop %d\n",c);
+
+		i=gmaxv/gsize;
+		j=gmaxv%gsize;
+	
+		g[i*gsize+j] = 1 - g[i*gsize+j];
+
+		best_count=CliqueCount(g,gsize);
+
+//		FIFOInsertEdge(taboo_list,i,j);
+		FIFOInsertEdgeCount(taboo_list,i,j,count);
+//		FIFOInsertEdge(taboo_list,best_x,best_y);
+
+		printf("ce size: %d, best_count: %d, best edge: (%d,%d), new color: %d\n",
+			gsize,
+			best_count,
+			i,
+			j,
+			g[i*gsize+j]);
+	
+		lastcount=best_count;
+
+		DumpGraph(g,gsize);
+}
+
+void search8()
+{
+		int i,j;
+		best_count = BIGCOUNT;
+		best_count5 = BIGCOUNT;
+
+		gg=(int*)malloc(gsize*gsize*sizeof(int));
+
+		memset(gg,0,gsize*gsize*sizeof(int));
+		gmax=0;
+
+		count=CliqueCount3(g,gsize);
+		CliqueCount6(g,gsize);
+
+		printf("test 10,30 : %d\n",gg[10*gsize+30]);
+		exit(1);
+
+		gmax=-IMAX;
+		gmaxv=0;
+		int m,n,diff;
+		for(m=0;m<gsize;m++)
+			for(n=m+1;n<gsize;n++)
+			{
+				diff=gg[m*gsize+n];
+				if(diff>gmax && !FIFOFindEdgeCount(taboo_list,m,n,count))
+				{
+					gmax=diff;
+					gmaxv=m*gsize+n;
+					printf("%d,%d - %d\n",m,n,gmax);
+				}
+			}
+
+		i=gmaxv/gsize;
+		j=gmaxv%gsize;
+	
+		g[i*gsize+j] = 1 - g[i*gsize+j];
+
+		best_count=CliqueCount(g,gsize);
+
+//		FIFOInsertEdge(taboo_list,i,j);
+		FIFOInsertEdgeCount(taboo_list,i,j,count);
+//		FIFOInsertEdge(taboo_list,best_x,best_y);
+
+		printf("ce size: %d, best_count: %d, best edge: (%d,%d), new color: %d\n",
+			gsize,
+			best_count,
+			i,
+			j,
+			g[i*gsize+j]);
+	
+		lastcount=best_count;
+
+		DumpGraph(g,gsize);
+}
+
 int
 main(int argc,char *argv[])
 {
@@ -626,6 +1243,15 @@ main(int argc,char *argv[])
 	 */
 
 	ReadDump(g);
+	/*
+        gsize=80;
+        g=(int*)malloc(61*61*sizeof(int));
+        new_g=(int*)malloc(gsize*gsize*sizeof(int));
+        ReadGraph(g,61);
+        CopyGraph(g,61,new_g,gsize);
+        free(g);
+        g=new_g;
+	*/
 	/*
 	 * make a fifo to use as the taboo list
 	 */
@@ -656,7 +1282,7 @@ main(int argc,char *argv[])
 			continue;
 		}
 
-		search1();
+		search7();
 		//search2();
 
 	}
