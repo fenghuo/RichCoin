@@ -14,6 +14,21 @@
 
 #define IMAX (2000000000)
 
+int *g;
+int *new_g;
+int gsize;
+int count;
+int i,j,x,y;
+int best_count;
+int best_i;
+int best_j;
+int best_x;
+int best_y;
+void *taboo_list;
+int flag=1;
+int lastcount=IMAX;
+
+
 /***
  *** example of very simple search for R(6,6) counter examples
  ***
@@ -70,7 +85,54 @@ void WriteGraph(int *g, int gsize)
 	fclose(f);
 	return;
 }
+void DumpGraph(int *g, int gsize)
+{
+	int i;
+	int j;
 
+	FILE*f;
+	f=fopen("dump","w");
+
+	fprintf(f,"%d\n",gsize);
+	for(i=0; i < gsize; i++)
+	{
+		for(j=0; j < gsize; j++)
+		{
+			fprintf(f,"%d",g[i*gsize+j]);
+		}
+	}
+
+	fclose(f);
+	return;
+}
+
+
+void ReadDump()
+{
+	int i;
+	int j;
+
+	FILE*f;
+	f=fopen("dump","r");
+
+	fscanf(f,"%d\n",&gsize);
+
+
+	g = (int *)malloc(gsize*gsize*sizeof(int));
+
+	for(i=0; i < gsize; i++)
+	{
+		for(j=0; j < gsize; j++)
+		{
+			char t;
+			fscanf(f,"%c",&t);
+			g[i*gsize+j]=(t-'0')+0;
+		}
+	}
+
+	fclose(f);
+	return ;
+}
 void ReadGraph(int *g, int gsize)
 {
 	int i;
@@ -294,131 +356,9 @@ void swap(int*g,int x,int y)
 	}
 }
 
-int
-main(int argc,char *argv[])
+
+void search1()
 {
-	int *g;
-	int *new_g;
-	int gsize;
-	int count;
-	int i;
-	int j;
-	int best_count;
-	int best_i;
-	int best_j;
-	int best_x;
-	int best_y;
-	void *taboo_list;
-
-	srand (time(NULL));
-
-	/*
-	 * start with graph of size 8
-	 */
-	gsize = 54;
-	g = (int *)malloc(gsize*gsize*sizeof(int));
-	if(g == NULL) {
-		exit(1);
-	}
-
-	/*
-	 * make a fifo to use as the taboo list
-	 */
-	taboo_list = FIFOInitEdge(TABOOSIZE);
-	if(taboo_list == NULL) {
-		exit(1);
-	}
-
-	/*
-	 * start out with all zeros
-	 */
-	memset(g,0,gsize*gsize*sizeof(int));
-	ReadGraph(g,gsize);
-
-	/*
-	int ns=gsize+10;
-
-	new_g = (int *)malloc((ns)*(ns)*sizeof(int));
-	//CopyGraph(g,gsize,new_g,ns);
-	GoodCopy(g,gsize,new_g,ns);
-	PrintGraph(new_g,ns);
-	count = CliqueCount(new_g,ns);
-	printf("%d\n",count);
-	return ;
-	*/
-	/*
-	 * while we do not have a publishable result
-	 */
-
-	int flag=1;
-	int lastcount=IMAX;
-
-	while(gsize < 102)
-	{
-		/*
-		 * find out how we are doing
-		 */
-		count = CliqueCount(g,gsize);
-
-		/*
-		 * if we have a counter example
-		 */
-		if(count == 0)
-		{
-			printf("Eureka!  Counter-example found!\n");
-			PrintGraph(g,gsize);
-			WriteGraph(g,gsize);
-			/*
-			 * make a new graph one size bigger
-			 */
-			new_g = (int *)malloc((gsize+1)*(gsize+1)*sizeof(int));
-			if(new_g == NULL)
-				exit(1);
-			/*
-			 * copy the old graph into the new graph leaving the
-			 * last row and last column alone
-			 */
-			//CopyGraph(g,gsize,new_g,gsize+1);
-			GoodCopy(g,gsize,new_g,gsize+1);
-
-			/*
-			 * zero out the last column and last row
-			for(i=0; i < (gsize+1); i++)
-			{
-				new_g[i*(gsize+1) + gsize] = 0; // last column
-				new_g[gsize*(gsize+1) + i] = 0; // last row
-			}
-
-			*/
-			/*
-			 * throw away the old graph and make new one the
-			 * graph
-			 */
-			free(g);
-			g = new_g;
-			gsize = gsize+1;
-
-			/*
-			 * reset the taboo list for the new graph
-			 */
-			taboo_list = FIFOResetEdge(taboo_list);
-
-			/*
-			 * keep going
-			 */
-			continue;
-		}
-
-		/*
-		 * otherwise, we need to consider flipping an edge
-		 *
-		 * let's speculative flip each edge, record the new count,
-		 * and unflip the edge.  We'll then remember the best flip and
-		 * keep it next time around
-		 *
-		 * only need to work with upper triangle of matrix =>
-		 * notice the indices
-		 */
 
 		best_count = BIGCOUNT;
 		for(i=0; i < gsize; i++)
@@ -477,9 +417,141 @@ main(int argc,char *argv[])
 			best_i,
 			best_j,
 			g[best_i*gsize+best_j]);
+		DumpGraph(g,gsize);
 		/*
 		 * rinse and repeat
 		 */
+
+}
+
+void search2()
+{
+
+		best_count = BIGCOUNT;
+		for(x=0; x < gsize*gsize; x++)
+		{
+			if(x/gsize>=x%gsize)
+				continue;
+			for(y=x; y < gsize*gsize; y++)
+			{
+				if(y/gsize>=y%gsize)
+					continue;
+	
+				if(g[x]==g[y] && x!=y)
+					continue;
+				// flip it
+				swap(g,x,y);
+	
+				printf(" %d - %d : %d\n",x,y,best_count);
+				count = CliqueCount2(g,gsize,best_count);
+
+				// * is it better and the i,j,count not taboo?
+				if((count < best_count) && 
+//					!FIFOFindEdge(taboo_list,i,j))
+					!FIFOFindEdgeCount(taboo_list,x,y,count))
+				{
+					best_count = count;
+					best_x = x;
+					best_y = y;
+				}
+
+				// * flip it back
+				swap(g,x,y);
+			}
+		}
+		if(best_count == BIGCOUNT) {
+			printf("no best edge found, terminating\n");
+			exit(1);
+		}
+	
+		/*
+		 * keep the best flip we saw
+		 */
+
+		swap(g,x,y);
+
+		/*
+		 * taboo this graph configuration so that we don't visit
+		 * it again
+		 */
+		count = CliqueCount(g,gsize);
+//		FIFOInsertEdge(taboo_list,best_i,best_j);
+		FIFOInsertEdgeCount(taboo_list,best_x,best_y,count);
+//		FIFOInsertEdge(taboo_list,best_x,best_y);
+
+		printf("ce size: %d, best_count: %d, swap: (%d,%d)\n",
+			gsize,
+			best_count,
+			best_x,
+			best_y
+			);
+}
+
+void found()
+{
+
+			printf("Eureka!  Counter-example found!\n");
+			PrintGraph(g,gsize);
+			WriteGraph(g,gsize);
+
+			new_g = (int *)malloc((gsize+1)*(gsize+1)*sizeof(int));
+			if(new_g == NULL)
+				exit(1);
+
+			//CopyGraph(g,gsize,new_g,gsize+1);
+			GoodCopy(g,gsize,new_g,gsize+1);
+
+			free(g);
+			g = new_g;
+			gsize = gsize+1;
+
+			taboo_list = FIFOResetEdge(taboo_list);
+}
+
+int
+main(int argc,char *argv[])
+{
+
+	srand (time(NULL));
+
+	/*
+	 * start with graph of size 8
+	 */
+
+	ReadDump(g);
+	/*
+	 * make a fifo to use as the taboo list
+	 */
+	taboo_list = FIFOInitEdge(TABOOSIZE);
+	if(taboo_list == NULL) {
+		exit(1);
+	}
+
+	/*
+	 * start out with all zeros
+	 */
+
+
+	while(gsize < 102)
+	{
+		/*
+		 * find out how we are doing
+		 */
+		count = CliqueCount(g,gsize);
+
+		/*
+		 * if we have a counter example
+		 */
+		if(count == 0)
+		{
+
+			found();
+			continue;
+		}
+
+		search1();
+		//search2();
+
 	}
 
 	FIFODeleteGraph(taboo_list);
