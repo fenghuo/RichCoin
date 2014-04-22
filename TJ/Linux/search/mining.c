@@ -9,7 +9,7 @@
 
 #define MAXSIZE (512)
 
-#define TABOOSIZE (500)
+#define TABOOSIZE (1000)
 #define BIGCOUNT (9999999)
 
 #define IMAX (2000000000)
