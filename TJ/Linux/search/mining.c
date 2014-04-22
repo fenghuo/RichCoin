@@ -1597,7 +1597,7 @@ void search11()
 
 		printf("ce size: %d, best_count: %d, best edge: (%d,%d), new color: %d\n",
 			gsize,
-			CliqueCount(g,gsize),
+			best_count,
 			i,
 			j,
 			g[i*gsize+j]);
