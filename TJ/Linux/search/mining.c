@@ -9,7 +9,7 @@
 
 #define MAXSIZE (512)
 
-#define TABOOSIZE (1000)
+#define TABOOSIZE (500)
 #define BIGCOUNT (9999999)
 
 #define IMAX (2000000000)
@@ -36,6 +36,7 @@ int count3;
 int count2;
 int count1;
 int*gg=NULL;
+int*g5=NULL;
 int gmax,gmaxv;
 
 /***
@@ -400,7 +401,6 @@ int CliqueCount3(int *g,int gsize)
 			   (g[i*gsize+j] == g[j*gsize+l]) && 
 			   (g[i*gsize+j] == g[k*gsize+l]))
 			{
-			    count4++;
 			    for(m=l+1;m < gsize-sgsize+5; m++) 
 			    {
 				if((g[i*gsize+j] == g[i*gsize+m]) && 
@@ -422,6 +422,7 @@ int CliqueCount3(int *g,int gsize)
 						   (g[i*gsize+j] 
 							== g[m*gsize+n])) {
 			      					count++;
+								g5[m*gsize+n]=count5;
 							int t[6];
 							t[0]=i;
 							t[1]=j;
@@ -1117,9 +1118,13 @@ void search7()
 		best_count = BIGCOUNT;
 		best_count5 = BIGCOUNT;
 
+		if(!gg)
 		gg=(int*)malloc(gsize*gsize*sizeof(int));
+		if(!g5)
+		g5=(int*)malloc(gsize*gsize*sizeof(int));
 
 		memset(gg,0,gsize*gsize*sizeof(int));
+		memset(g5,0,gsize*gsize*sizeof(int));
 		gmax=0;
 
 		count=CliqueCount3(g,gsize);
@@ -1149,6 +1154,13 @@ void search7()
 					gmaxv=m*gsize+n;
 					printf("%d,%d - %d\n",m,n,gmax);
 				}
+				else if(decr-incr==gmax && g5[m*gsize+n]<best_count5)
+				{
+					best_count5=g5[m*gsize+n];
+					gmax=decr-incr;
+					gmaxv=m*gsize+n;
+					printf("%d,%d - %d\n",m,n,gmax);
+				}
 			}
 			}
 
@@ -1159,10 +1171,13 @@ void search7()
 	
 		g[i*gsize+j] = 1 - g[i*gsize+j];
 
-		best_count=CliqueCount(g,gsize);
-
+		if(lastcount==IMAX)
+			best_count=CliqueCount(g,gsize);
+		else
+			best_count=lastcount-gmax;
+	
 //		FIFOInsertEdge(taboo_list,i,j);
-		FIFOInsertEdgeCount(taboo_list,i,j,count);
+		FIFOInsertEdgeCount(taboo_list,i,j,best_count);
 //		FIFOInsertEdge(taboo_list,best_x,best_y);
 
 		printf("ce size: %d, best_count: %d, best edge: (%d,%d), new color: %d\n",
