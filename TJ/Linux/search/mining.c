@@ -38,6 +38,7 @@ int count1;
 int*gg=NULL;
 int*g5=NULL;
 int gmax,gmaxv;
+int cc;
 
 /***
  *** example of very simple search for R(6,6) counter examples
@@ -56,8 +57,10 @@ int gmax,gmaxv;
  */
 
 #define GET(g, X, Y ,size)  ((X) < (Y) ? (g[X*size+Y]) : (g[Y*size+X]))
+#define SET(g, X, Y ,size,c)  ((X) < (Y) ? (g[X*size+Y]=c) : (g[Y*size+X]=c))
 
 int CliqueCount4(int *g,int gsize,int x,int y);
+int CliqueCount(int *g,int gsize);
 
 void PrintGraph(int *g, int gsize)
 {
@@ -212,6 +215,128 @@ void CopyGraph(int *old_g, int o_gsize, int *new_g, int n_gsize)
 	return;
 }
 
+void draw5(int*g,int gsize,int*p)
+{
+	int i,j;
+	
+	for(i=0;i<4;i++)
+		for(j=i+1;j<5;j++)
+			SET(g,gsize,p[i],p[j],1);
+
+}
+
+void draw6(int k,int * p)
+{
+	int i,j;
+
+	for(i=0;i<gsize;i++)
+	{
+		for(j=0;j<5;j++)
+			p[j]=(i+k*j)%gsize;
+		draw5(g,gsize,p);
+	}
+}
+
+void ST(int*g,int gsize,int a,int b)
+{
+	if(a>b)
+	{
+		int t=a;
+		a=b;
+		b=t;
+	}
+	g[a*gsize+b]=1;
+}
+
+void draw7(int*g,int gsize,int k)
+{
+	int i,j;
+	for(i=0;i<gsize;i++)
+		ST(g,gsize,i,(i+k)%gsize);
+
+}
+
+void draw(int * g, int gsize)
+{
+	int i,j;
+
+	int p[5];
+
+	g=memset(g,0,gsize*gsize*sizeof(int));
+
+	for(i=1;i<5;i++)
+		draw7(g,gsize,i);
+
+	draw7(g,gsize,6);
+	draw7(g,gsize,7);
+	draw7(g,gsize,8);
+	draw7(g,gsize,9);
+
+	draw7(g,gsize,11);
+	draw7(g,gsize,12);
+	draw7(g,gsize,13);
+	draw7(g,gsize,14);
+
+	draw7(g,gsize,16);
+	draw7(g,gsize,17);
+	draw7(g,gsize,18);
+	draw7(g,gsize,19);
+
+	draw7(g,gsize,21);
+	draw7(g,gsize,22);
+	draw7(g,gsize,23);
+	draw7(g,gsize,24);
+
+	draw7(g,gsize,26);
+	draw7(g,gsize,27);
+	draw7(g,gsize,28);
+	draw7(g,gsize,29);
+
+	/*
+	draw7(g,gsize,31);
+	draw7(g,gsize,32);
+	draw7(g,gsize,33);
+	draw7(g,gsize,34);
+
+	draw7(g,gsize,36);
+	draw7(g,gsize,37);
+	draw7(g,gsize,38);
+	draw7(g,gsize,39);
+	*/
+	count=CliqueCount(g,gsize);
+
+	printf("cc %d,count: %d\n",cc,count);
+
+	int best;
+	/*
+	while(1)
+	{
+	best=IMAX;
+	best_i=-1;
+	for(i=0;i<gsize;i++)
+		for(j=i+1;j<gsize;j++)
+		{
+			if(!g[i*gsize+j])
+			{
+				g[i*gsize+j]=1-g[i*gsize+j];
+				count=CliqueCount(g,gsize);
+				g[i*gsize+j]=1-g[i*gsize+j];
+				if(count<best && !cc)
+				{
+					best_i=i;
+					best_j=j;
+					best=count;
+					printf(" we can choose : %d, %d -> %d \n",i,j,count);
+				}
+			}
+
+		}
+	if(best_i<0)
+		exit(1);		
+	g[best_i*gsize+best_j]=1-g[best_i*gsize+best_j];
+	}
+*/
+} 
 
 /*
  ***
@@ -234,6 +359,7 @@ int CliqueCount(int *g,
     int count=0;
     int sgsize = 6;
     count5=0;
+    cc=0;
     
     for(i=0;i < gsize-sgsize+1; i++)
     {
@@ -270,6 +396,8 @@ int CliqueCount(int *g,
 						   (g[i*gsize+j] 
 							== g[m*gsize+n])) {
 			      					count++;
+								if(g[i*gsize+j])
+									cc++;
 						}
 					}
 				}
@@ -280,6 +408,7 @@ int CliqueCount(int *g,
 	    }
          }
      }
+
     return(count);
 }
 int CliqueCount2(int *g,int gsize,int maxcount)
@@ -564,6 +693,78 @@ int CliqueCount6(int *g, int gsize)
 		for(j=i+1;j<gsize;j++)
 			CliqueCount4(g,gsize,i,j);
 
+}
+
+int CliqueCount7(int *g,int gsize)
+{
+    int i;
+    int j;
+    int k;
+    int l;
+    int m;
+    int n;
+    int count=0;
+    int sgsize = 6;
+    count5=count4=count3=count2=count1=0;
+    
+    for(i=0;i < gsize-sgsize+1; i++)
+    {
+	for(j=i+1;j < gsize-sgsize+2; j++)
+        {
+		if(g[i*gsize+j])
+			continue;
+	    for(k=j+1;k < gsize-sgsize+3; k++) 
+            { 
+		if((g[i*gsize+j] == g[i*gsize+k]) && 
+		   (g[i*gsize+j] == g[j*gsize+k]))
+		{
+		    for(l=k+1;l < gsize-sgsize+4; l++) 
+		    { 
+			if((g[i*gsize+j] == g[i*gsize+l]) && 
+			   (g[i*gsize+j] == g[j*gsize+l]) && 
+			   (g[i*gsize+j] == g[k*gsize+l]))
+			{
+			    for(m=l+1;m < gsize-sgsize+5; m++) 
+			    {
+				if((g[i*gsize+j] == g[i*gsize+m]) && 
+				   (g[i*gsize+j] == g[j*gsize+m]) &&
+				   (g[i*gsize+j] == g[k*gsize+m]) && 
+				   (g[i*gsize+j] == g[l*gsize+m])) {
+					
+					count5++;
+					for(n=m+1; n < gsize-sgsize+6; n++)
+					{
+						if((g[i*gsize+j]
+							== g[i*gsize+n]) &&
+						   (g[i*gsize+j] 
+							== g[j*gsize+n]) &&
+						   (g[i*gsize+j] 
+							== g[k*gsize+n]) &&
+						   (g[i*gsize+j] 
+							== g[l*gsize+n]) &&
+						   (g[i*gsize+j] 
+							== g[m*gsize+n])) {
+			      					count++;
+								g5[m*gsize+n]=count5;
+							int t[6];
+							t[0]=i;
+							t[1]=j;
+							t[2]=k;
+							t[3]=l;
+							t[4]=m;
+							t[5]=n;
+							add2(t,count);	
+						}
+					}
+				}
+			    }
+			}
+		    }
+		}
+	    }
+         }
+     }
+    return(count);
 }
 void GoodCopy(int*o,int os,int*n,int ns)
 {
@@ -1171,13 +1372,10 @@ void search7()
 	
 		g[i*gsize+j] = 1 - g[i*gsize+j];
 
-		if(lastcount==IMAX)
-			best_count=CliqueCount(g,gsize);
-		else
-			best_count=lastcount-gmax;
+		best_count=count-gmax;
 	
 //		FIFOInsertEdge(taboo_list,i,j);
-		FIFOInsertEdgeCount(taboo_list,i,j,best_count);
+		FIFOInsertEdgeCount(taboo_list,i,j,count);
 //		FIFOInsertEdge(taboo_list,best_x,best_y);
 
 		printf("ce size: %d, best_count: %d, best edge: (%d,%d), new color: %d\n",
@@ -1247,6 +1445,184 @@ void search8()
 		DumpGraph(g,gsize);
 }
 
+void search9()
+{
+		int i,j;
+		best_count = BIGCOUNT;
+		best_count5 = BIGCOUNT;
+
+		if(!gg)
+		gg=(int*)malloc(gsize*gsize*sizeof(int));
+		if(!g5)
+		g5=(int*)malloc(gsize*gsize*sizeof(int));
+
+		memset(gg,0,gsize*gsize*sizeof(int));
+		memset(g5,0,gsize*gsize*sizeof(int));
+		gmax=0;
+
+		count=CliqueCount3(g,gsize);
+
+		i=gmaxv/gsize;
+		j=gmaxv%gsize;
+
+	//	printf("test 10,30 : %d\n",gg[10*gsize+30]-CliqueCount4(g,gsize,10,30));
+	//	exit(1);
+
+
+		gmax=-IMAX;
+		gmaxv=0;
+		int c=0;
+		int m,n,decr,incr;
+		for(m=0;m<gsize;m++)
+			for(n=m+1;n<gsize;n++)
+			{
+				decr=gg[m*gsize+n];
+				if(decr>gmax && !FIFOFindEdgeCount(taboo_list,m,n,count))
+			{
+				c++;
+				incr=CliqueCount4(g,gsize,m,n);
+				if(decr-incr>gmax)
+				{
+					gmax=decr-incr;
+					gmaxv=m*gsize+n;
+					printf("%d,%d - %d\n",m,n,gmax);
+				}
+				else if(decr-incr==gmax && g5[m*gsize+n]<best_count5)
+				{
+					best_count5=g5[m*gsize+n];
+					gmax=decr-incr;
+					gmaxv=m*gsize+n;
+					printf("%d,%d - %d\n",m,n,gmax);
+				}
+			}
+			}
+
+		printf(" loop %d\n",c);
+
+		i=gmaxv/gsize;
+		j=gmaxv%gsize;
+	
+		if(gmax<-2)
+		{
+			printf(" I Jump ###################################################\n");
+			i=j=rand()%(gsize-1);
+			while(j<=i)
+				j=rand()%gsize;
+		}
+
+		g[i*gsize+j] = 1 - g[i*gsize+j];
+
+		best_count=count-gmax;
+	
+//		FIFOInsertEdge(taboo_list,i,j);
+		FIFOInsertEdgeCount(taboo_list,i,j,count);
+//		FIFOInsertEdge(taboo_list,best_x,best_y);
+
+		printf("ce size: %d, best_count: %d, best edge: (%d,%d), new color: %d\n",
+			gsize,
+			best_count,
+			i,
+			j,
+			g[i*gsize+j]);
+	
+		lastcount=best_count;
+
+		DumpGraph(g,gsize);
+}
+
+void search10()
+{
+	int i,j;
+	
+	memset(g,0,gsize*gsize*sizeof(int));
+
+	//printf("%d\n",CliqueCount(g,gsize));
+	draw(g,gsize);
+
+	printf("%d\n",CliqueCount(g,gsize));
+
+	exit(1);
+}
+
+//count7 only count1
+void search11()
+{
+		int i,j;
+		best_count = BIGCOUNT;
+		best_count5 = BIGCOUNT;
+
+		if(!gg)
+		gg=(int*)malloc(gsize*gsize*sizeof(int));
+		if(!g5)
+		g5=(int*)malloc(gsize*gsize*sizeof(int));
+
+		memset(gg,0,gsize*gsize*sizeof(int));
+		memset(g5,0,gsize*gsize*sizeof(int));
+		gmax=0;
+
+		count=CliqueCount7(g,gsize);
+
+		gmax=-IMAX;
+		gmaxv=0;
+		int c=0;
+		int m,n,decr,incr;
+		for(m=0;m<gsize;m++)
+			for(n=m+1;n<gsize;n++)
+			{
+				decr=gg[m*gsize+n];
+				if(decr>gmax && !FIFOFindEdgeCount(taboo_list,m,n,count))
+			{
+				incr=CliqueCount4(g,gsize,m,n);
+				if(incr)
+					continue;
+				if(decr>gmax)
+				{
+					gmax=decr-incr;
+					gmaxv=m*gsize+n;
+					printf("%d,%d - %d\n",m,n,gmax);
+				}
+			}
+			}
+
+		i=gmaxv/gsize;
+		j=gmaxv%gsize;
+	
+		g[i*gsize+j] = 1 - g[i*gsize+j];
+
+		best_count=count-gmax;
+	
+//		FIFOInsertEdge(taboo_list,i,j);
+		FIFOInsertEdgeCount(taboo_list,i,j,count);
+//		FIFOInsertEdge(taboo_list,best_x,best_y);
+
+		printf("ce size: %d, best_count: %d, best edge: (%d,%d), new color: %d\n",
+			gsize,
+			CliqueCount(g,gsize),
+			i,
+			j,
+			g[i*gsize+j]);
+	
+		lastcount=best_count;
+
+		DumpGraph(g,gsize);
+}
+void sort(int*s,int n)
+{
+	int i,j;
+	for(i=0;i<n;i++)
+		for(j=i+1;j<n;j++)
+	{
+		if(s[i]>s[j])
+		{
+			int t=s[j];
+			s[j]=s[i];
+			s[i]=t;
+		}
+	}
+}
+
+
+
 int
 main(int argc,char *argv[])
 {
@@ -1258,15 +1634,18 @@ main(int argc,char *argv[])
 	 */
 
 	ReadDump(g);
+	
+	
 	/*
-        gsize=80;
-        g=(int*)malloc(61*61*sizeof(int));
+	int og=gsize;
+        gsize=100;
         new_g=(int*)malloc(gsize*gsize*sizeof(int));
-        ReadGraph(g,61);
-        CopyGraph(g,61,new_g,gsize);
+        CopyGraph(g,og,new_g,gsize);
         free(g);
         g=new_g;
+	draw(g,gsize);
 	*/
+
 	/*
 	 * make a fifo to use as the taboo list
 	 */
